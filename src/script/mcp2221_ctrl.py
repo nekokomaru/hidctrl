@@ -194,7 +194,7 @@ def main():
 	index = 0  # numbering devices
 	target_dict = []  # target list
 	for device_dict in hid.enumerate(vendor_id=v_id, product_id=p_id):
-		if device_dict['interface_number'] > 0:
+		if device_dict['interface_number'] >= 0:
 			print("No.{0:d} : {1:s}".format(index, device_dict['product_string']))
 			d = { 'no': index, 'product_string': device_dict['product_string'], 'path': device_dict['path'], 'vendor_id': device_dict['vendor_id'], 'product_id': device_dict['product_id'] }
 			target_dict.append(d)
