@@ -19,6 +19,7 @@ Hid デバイスである MCP2221a の GPIO を制御する python3 スクリプ
 - ホスト側
   - Windows10 64bit PC
   - [Python v3.9.2](https://www.python.org/)
+  - 本プロジェクトのスクリプト [mcp2221_ctrl.py](https://github.com/nekokomaru/hidctrl/tree/main/src/script)
 
 ### 免責事項
 本ソフトウェアの動作は保証しない。著作者は一切の責任を負わない
