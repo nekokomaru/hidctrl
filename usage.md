@@ -84,20 +84,21 @@ option example:
 
 ### ターゲット側の準備
 1. [ハードウェアセットアップ](#ハードウェアセットアップ)を行っておく
-2. `src/gpio2cmd` に移動し、設定ファイル `gpio2cmd.conf` を必要に応じて書き換える。gpio には検出対象の gpio 番号を、edge には 検出する gpio 信号のパターンを（`rising` / `falling` / `both` ）、command には gpio 信号を検出したときに実行するコマンドを記述する。command は、実行コマンド名のあとに4つまでオプションを指定することが出来る。スペースで区切って記述すること  
+2. RTC board For RaspberryPI Rev1.1 を使うのであれば、`/boot/firmware/syscfg.txt` を書き換え（ubuntu の場合）、**i2c1 (=i2c_arm) を無効にしておく**
+3. `src/gpio2cmd` に移動し、設定ファイル `gpio2cmd.conf` を必要に応じて書き換える。gpio には検出対象の gpio 番号を、edge には 検出する gpio 信号のパターンを（`rising` / `falling` / `both` ）、command には gpio 信号を検出したときに実行するコマンドを記述する。command は、実行コマンド名のあとに4つまでオプションを指定することが出来る。スペースで区切って記述すること  
 RTC board For RaspberryPI Rev1.1 及び epgrtc-tools とともに運用するときは、特に書き換える必要はない
 ```text:gpio2cmd.conf
 gpio = 2
 edge = falling
 command = /usr/local/bin/shutdown_srv
 ```
-3. サービスのビルドとインストールを行う
+4. サービスのビルドとインストールを行う
 ```shell:bash
 make    # 実行ファイルをビルドする
 sudo make install    # 実行ファイルをインストールする
 sudo ./install_service.sh install    # サービスをインストールする
 ```
-4. 再起動すると準備完了
+5. 再起動すると準備完了
 
 ### ホストからの shutdown のやり方
 1. 以下のコマンドを入力すると、USB に接続されていて最初に見つかった `PCF2129 RTC CONTROLLER` デバイスを制御して raspberrypi を shutdown させる。（正確には、gpio2cmd.conf の command で指定したコマンドが実行される）
@@ -110,7 +111,7 @@ python mcp2221_ctrl.py -h
 ```
 
 ### ターゲット側のアンインストール方法
-以下の操作でアンインストールする
+以下の操作のあと再起動するとアンインストールが完了する
 ```shell:bash
 sudo ./install_service.sh uninstall
 sudo make uninstall
