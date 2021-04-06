@@ -208,10 +208,14 @@ def main():
 		print('no target device')
 		sys.exit(0)
 
+	if args.no != None and args.no >= index:
+		print('none target no.{0:d}'.format(args.no))
+		sys.exit(0)
+
 	# setup product string and gpio setting
 	if args.setup:
 		if args.no != None:
-			ret = setup(target_dict[args.no]['path'], p_name=p_name)
+			ret = setup(path=target_dict[args.no]['path'], p_name=p_name)
 			if ret == 0:
 				print('setup successed')
 			else:
