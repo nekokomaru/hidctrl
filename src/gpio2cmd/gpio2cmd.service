@@ -1,0 +1,12 @@
+[Unit]
+Description=translator GPIO input to execute command
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/local/bin/gpio2cmd
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+

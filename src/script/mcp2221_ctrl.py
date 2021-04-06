@@ -26,15 +26,18 @@ def get_args():
 	formatter_class=argparse.RawDescriptionHelpFormatter,
 	epilog='''option example:
 --setup --no 0  : device 0 in the list to be setup for PCF2129 rtc module
---wakeup        : wakeup first PCF2129 rtc module named \'PCF2129 RTC CONTROLLER\'
---wakeup --no 1 : wakeup PCF2129 rtc module named \'PCF2129 RTC CONTROLLER\' and numbered \'1\' in the list
+--wakeup        : wakeup first PCF2129 rtc module named \'{0:s}\'
+--shutdown      : shutdown first PCF2129 rtc module named \'{0:s}\'
+--wakeup --no 1 : wakeup PCF2129 rtc module named \'{0:s}\' and numbered \'1\' in the list
 --wakeup --name hoge : wakeup first PCF2129 rtc module named \'hoge\'
---wakeup --name hoge --no 1 : wakeup PCF2129 rtc module named \'hoge\' and numbered \'1\' in the list''')
+--wakeup --name hoge --no 1 : wakeup PCF2129 rtc module named \'hoge\' and numbered \'1\' in the list
+--setup --no 0 --name hoge : device 0 in the list to be setup for PCF2129 rtc module and name as \'hoge\''''.format(DEFAULT_NAME))
 	
 	group = parser.add_mutually_exclusive_group()
 	parser.add_argument('--setup', action='store_true', help='setup hid device for PCF2129 rtc module')
 	parser.add_argument('--no', type=int, help='specify target hid device\'s no. in the list')
 	parser.add_argument('--wakeup', action='store_true', help='wakeup target hid device')
+	parser.add_argument('--shutdown', action='store_true', help='shutdown target hid device')
 	parser.add_argument('--vid', type=int, nargs='?', default=DEFAULT_VID, help='specify target\'s VID')
 	parser.add_argument('--pid', type=int, nargs='?', default=DEFAULT_PID, help='specify target\'s PID')
 	parser.add_argument('--name', type=str, nargs='?', default=DEFAULT_NAME, help='specify target\'s product name')
@@ -248,6 +251,18 @@ def main():
 			ret = gpioctrl(path=dic['path'], no=0x00, val=0x00)
 			if ret != 0:
 				print('error wakeup')
+				sys.exit(0)
+
+		elif args.shutdown:
+			print('shutdown')
+			ret = gpioctrl(path=dic['path'], no=0x01, val=0x01)
+			if ret != 0:
+				print('error shutdown')
+				sys.exit(0)
+			time.sleep(0.5)
+			ret = gpioctrl(path=dic['path'], no=0x01, val=0x00)
+			if ret != 0:
+				print('error shutdown')
 				sys.exit(0)
 
 		elif args.hi or args.lo:
